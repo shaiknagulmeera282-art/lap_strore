@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10172a">
+    <title>LAPTOP Store | Laptops for Every Ambition</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/script.js" defer></script>
+</head>
+<body>
+    <div class="announcement">
+        <span>✦</span> Find your next upgrade at LAP Store
+        <span class="announcement-end">Explore. Compare. Choose.</span>
+    </div>
+
+    <header class="header">
+        <a class="brand" href="/" aria-label="LAP Store home">
+            <span class="brand-mark">L</span>
+            <span>LAPTOP <b>Store</b></span>
+        </a>
+
+        <form id="search-form" class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="search-input" type="search"
+                   placeholder="Search brand, laptop, or model..."
+                   aria-label="Search laptops">
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="header-actions">
+            <button id="theme-toggle" class="icon-button" type="button"
+                    aria-label="Toggle light and dark theme" title="Toggle theme">☾</button>
+            <button id="wishlist-toggle" class="header-button" type="button">
+                ♡ <span class="desktop-label">Wishlist</span>
+                <span id="wishlist-count" class="count">0</span>
+            </button>
+            <button id="cart-toggle" class="header-button cart-header" type="button">
+                🛒 <span class="desktop-label">Cart</span>
+                <span id="cart-count" class="count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <nav class="navigation" aria-label="Laptop categories">
+        <a href="#products" class="nav-link active" data-filter="all">All laptops</a>
+        <a href="#gaming" class="nav-link" data-filter="gaming">Gaming zone</a>
+        <a href="#products" class="nav-link" data-filter="business">Business</a>
+        <a href="#products" class="nav-link" data-filter="student">Student</a>
+        <a href="#products" class="nav-link" data-filter="creator">Creator</a>
+        <a href="#products" class="nav-link" data-filter="deals">Deals</a>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <span class="eyebrow hero-eyebrow">WELCOME TO LAP STORE</span>
+                <h1>Find your power.<br><span>Define your world.</span></h1>
+                <p>Discover laptops for work, study, creativity, and gaming. Your next upgrade starts here.</p>
+
+                <div class="hero-actions">
+                    <a href="#products" class="btn btn-primary">Explore laptops <span>→</span></a>
+                    <a href="#gaming" class="btn btn-outline-light">Enter gaming zone</a>
+                </div>
+
+                <div class="hero-points">
+                    <span>✓ Easy product discovery</span>
+                    <span>✓ Clear prices</span>
+                    <span>✓ Stock visibility</span>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <div class="hero-image-glow"></div>
+                <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1100&q=85"
+                     alt="Laptop displayed in a premium workspace" fetchpriority="high">
+                <div class="hero-float-card">
+                    <span class="float-icon">✦</span>
+                    <div><strong>Your next upgrade</strong><small>Find your perfect match</small></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="benefits">
+            <article><span class="benefit-icon">⌕</span><div><b>Find your match</b><small>Search and filter laptops</small></div></article>
+            <article><span class="benefit-icon">◇</span><div><b>Compare choices</b><small>Review product details</small></div></article>
+            <article><span class="benefit-icon">▣</span><div><b>Know your stock</b><small>Check product availability</small></div></article>
+            <article><span class="benefit-icon">♡</span><div><b>Save favorites</b><small>Keep a personal wishlist</small></div></article>
+        </section>
+
+        <section id="gaming" class="gaming">
+            <div class="gaming-copy">
+                <span class="eyebrow gaming-eyebrow">LAP STORE / GAMING</span>
+                <h2>Enter the game.<br><span>Own the experience.</span></h2>
+                <p>Explore gaming laptops designed for demanding games, immersive worlds, and powerful performance.</p>
+                <button class="btn btn-gaming" type="button" data-filter="gaming">
+                    Explore gaming laptops <span>↗</span>
+                </button>
+                <div class="gaming-spec-tags">
+                    <span>PERFORMANCE</span><span>GRAPHICS</span><span>IMMERSION</span>
+                </div>
+            </div>
+            <div class="gaming-image">
+                <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=1100&q=85"
+                     alt="Gaming laptop in a dark setup" loading="lazy">
+                <div class="gaming-image-label">YOUR GAME. YOUR RULES.</div>
+            </div>
+        </section>
+
+        <section id="products" class="products-section">
+            <div class="section-header">
+                <div>
+                    <span class="eyebrow">THE LAP STORE COLLECTION</span>
+                    <h2 id="section-title">Explore our laptops</h2>
+                    <p id="section-subtitle">The right technology for wherever you're going.</p>
+                </div>
+                <label class="sort-box">
+                    <span>Sort:</span>
+                    <select id="sort-select" aria-label="Sort products">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: low to high</option>
+                        <option value="price-high">Price: high to low</option>
+                        <option value="name">Name: A to Z</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="filter-bar" aria-label="Filter laptops">
+                <button class="filter-chip active" type="button" data-filter="all">All laptops</button>
+                <button class="filter-chip" type="button" data-filter="gaming">🎮 Gaming</button>
+                <button class="filter-chip" type="button" data-filter="business">Business</button>
+                <button class="filter-chip" type="button" data-filter="student">Student</button>
+                <button class="filter-chip" type="button" data-filter="creator">Creator</button>
+                <button class="filter-chip" type="button" data-filter="deals">Deals</button>
+            </div>
+
+            <p id="status-message" class="status-message" role="status">Loading products...</p>
+            <div id="product-grid" class="product-grid"></div>
+        </section>
+
+        <section class="bottom-banner">
+            <div class="banner-symbol">L</div>
+            <div class="banner-copy">
+                <h2>Ready for your next upgrade?</h2>
+                <p>Explore the collection and find a laptop that fits your needs.</p>
+            </div>
+            <a href="#products" class="btn btn-banner">Browse laptops →</a>
+        </section>
+    </main>
+
+    <div id="overlay" class="overlay" hidden></div>
+
+    <aside id="cart-panel" class="side-panel" role="dialog"
+           aria-modal="true" aria-label="Shopping cart" hidden>
+        <div class="panel-header">
+            <div><span class="eyebrow">LAP STORE</span><h2>Your cart</h2></div>
+            <button class="close-button" type="button" data-close-panel aria-label="Close">✕</button>
+        </div>
+        <div id="cart-items" class="panel-content"></div>
+        <div class="panel-footer">
+            <div class="total-line"><span>Subtotal</span><strong id="cart-total">₹0</strong></div>
+            <p>Shipping, final stock validation, and payment are handled at checkout.</p>
+            <button id="checkout-button" class="btn btn-primary full-width" type="button">Continue to checkout →</button>
+            <p id="cart-message" class="panel-message" role="status"></p>
+        </div>
+    </aside>
+
+    <aside id="wishlist-panel" class="side-panel" role="dialog"
+           aria-modal="true" aria-label="Wishlist" hidden>
+        <div class="panel-header">
+            <div><span class="eyebrow">SAVED FOR LATER</span><h2>My wishlist</h2></div>
+            <button class="close-button" type="button" data-close-panel aria-label="Close">✕</button>
+        </div>
+        <div id="wishlist-items" class="panel-content"></div>
+    </aside>
+
+    <section id="product-modal" class="product-modal" role="dialog"
+             aria-modal="true" aria-label="Product details" hidden>
+        <button class="close-button modal-close" type="button" data-close-modal aria-label="Close">✕</button>
+        <div id="product-modal-content"></div>
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <footer class="footer">
+        <a class="brand footer-brand" href="/"><span class="brand-mark">L</span><span>LAP <b>Store</b></span></a>
+        <p>Your technology. Your ambition. Your LAP Store.</p>
+        <small>© 2026 LAP Store</small>
+    </footer>
+</body>
+</html>

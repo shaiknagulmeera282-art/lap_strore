@@ -11,25 +11,3 @@ class Product(Base):
     description = Column(String(255), nullable=True)
     price = Column(Numeric(10, 2), nullable=False)
     quantity = Column(Integer, default=0)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
