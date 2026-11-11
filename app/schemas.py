@@ -3,6 +3,15 @@ from pydantic import BaseModel, ConfigDict
 from pydantic import BaseModel, ConfigDict, EmailStr
 
 
+from pydantic import BaseModel, ConfigDict
+
+class ProductResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    # Keep your existing product fields here
+
+
+
 class ProductCreate(BaseModel):
     name: str
     description: str | None = None

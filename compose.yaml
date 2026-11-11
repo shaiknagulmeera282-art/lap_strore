@@ -1,0 +1,35 @@
+
+services:
+
+  api:
+    build: .
+    container_name: lap-store-api
+    ports:
+      - "8002:8000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:nagul@postgres:5432/lap_store
+      REDIS_URL: redis://redis:6379/0
+
+  postgres:
+    image: postgres:16
+    container_name: lap-store-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: lap_password
+      POSTGRES_DB: lap_store
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: lap-store-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
