@@ -24,8 +24,6 @@ import json
 # from app.core.redis import redis_client
 import redis.asyncio as redis
 
-
-
 import os
 import jwt
 from pathlib import Path
@@ -62,12 +60,6 @@ async def test_redis():
     response = await redis_client.ping()
     return response
 
-
-
-
-
-
-
 # @asynccontextmanager
 async def lifespan(app: FastAPI):
     await redis_client.ping()
@@ -76,10 +68,6 @@ async def lifespan(app: FastAPI):
     # Close Redis connection
     await redis_client.aclose()
     print("Redis connection closed")
-
-
-
-
 
 
 app = FastAPI(lifespan=lifespan)
@@ -98,8 +86,6 @@ app.mount(
 def home():
     return FileResponse(STATIC_DIR / "index.html")
     
-
-
 app.include_router(users_router)
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -110,7 +96,6 @@ app.mount(
     StaticFiles(directory=str(STATIC_DIR)),
     name="static",
 )
-
 
 @app.get("/", include_in_schema=False)
 def serve_frontend():
@@ -124,12 +109,9 @@ def get_db():
     finally:
         db.close()
 
-
 # @app.get("/")
 # def home():
 #     return {"message": "Welcome to Laptop Store API....."}
-
-
 
 @app.get("/products", response_model=list[ProductResponse])
 async def get_products(db: Session = Depends(get_db)):
