@@ -48,8 +48,13 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
+REDIS_URL = os.getenv(
+    "REDIS_URL",
+    "redis://localhost:6379/0"
+)
+
 redis_client = redis.from_url(
-    "redis://localhost:6379/0",
+    REDIS_URL,
     decode_responses=True
 )
 
