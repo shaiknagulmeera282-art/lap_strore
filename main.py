@@ -1,4 +1,7 @@
-﻿from fastapi import FastAPI, Depends, HTTPException
+﻿from app.webhooks.order_webhook import router as webhook_router
+from app.webhooks.sender import send_webhook
+
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.user_api import router as users_router
@@ -32,6 +35,8 @@ from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
 from jwt.exceptions import InvalidTokenError
 
+
+# app.include_router(user_router)
 # Load .env from the project root
 BASE_DIR = Path(__file__).resolve().parent.parent
 ENV_FILE = BASE_DIR / ".env"
@@ -86,7 +91,7 @@ app.mount(
 def home():
     return FileResponse(STATIC_DIR / "index.html")
     
-app.include_router(users_router)
+app.include_router(webhook_router)
 
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
@@ -220,6 +225,7 @@ async def clear_product_cache(product_id=None):
 
 
 
+
 @app.post(
     "/products",
     response_model=ProductResponse,
@@ -229,16 +235,40 @@ async def create_product(
     product_data: ProductCreate,
     db: Session = Depends(get_db)
 ):
+    # 1. Create product
     product = Product(**product_data.model_dump())
 
+    # 2. Save product in PostgreSQL
     db.add(product)
     db.commit()
     db.refresh(product)
 
-    # Clear old cache
+    # 3. Clear Redis cache
     await clear_product_cache(product.id)
 
+    # 4. Prepare webhook payload
+    webhook_payload = {
+        "event": "product.created",
+        "product_id": product.id,
+        "product_name": product.name,
+        "price": float(product.price),
+        "quantity": product.quantity or 0
+    }
+
+    # 5. Send webhook notification
+    try:
+        webhook_url = "http://127.0.0.1:8001/webhooks/products"
+
+        await send_webhook(webhook_url, webhook_payload)
+
+        print("PRODUCT WEBHOOK SENT SUCCESSFULLY")
+
+    except Exception as error:
+        print("PRODUCT WEBHOOK DELIVERY FAILED:", error)
+
+    # 6. Return created product
     return product
+
 
 
 
