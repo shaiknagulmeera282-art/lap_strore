@@ -1,5 +1,6 @@
 ﻿from app.webhooks.order_webhook import router as webhook_router
 from app.webhooks.sender import send_webhook
+import redis.asyncio as redis
 
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
