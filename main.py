@@ -7,8 +7,12 @@ from sqlalchemy.orm import Session
 from app.user_api import router as users_router
 
 from app.database import SessionLocal
-from app.models import Product
-from app.schemas import ProductCreate, ProductResponse
+# from app.models import Product
+from app.user_models import User
+from app.models import Product, Order
+
+# from app.schemas import ProductCreate, ProductResponse
+from app.schemas import ProductCreate, ProductResponse, OrderCreate, OrderResponse
 
 from pathlib import Path
 
@@ -113,6 +117,105 @@ def get_db():
         yield db
     finally:
         db.close()
+
+@app.post(
+    "/orders",
+    response_model=OrderResponse,
+    status_code=201
+)
+async def create_order(
+    order_data: OrderCreate,
+    db: Session = Depends(get_db)
+):
+    # 1. Check whether customer exists
+    user = db.query(User).filter(
+        User.id == order_data.user_id
+    ).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    # 2. Find the laptop
+    product = db.query(Product).filter(
+        Product.id == order_data.product_id
+    ).first()
+
+    if not product:
+        raise HTTPException(
+            status_code=404,
+            detail="Product not found"
+        )
+
+    # 3. Check requested quantity
+    if order_data.quantity <= 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Quantity must be greater than zero"
+        )
+
+    if (product.quantity or 0) < order_data.quantity:
+        raise HTTPException(
+            status_code=400,
+            detail="Insufficient product stock"
+        )
+
+    # 4. Calculate total price
+    total_price = product.price * order_data.quantity
+
+    # 5. Create order
+    order = Order(
+        user_id=order_data.user_id,
+        product_id=order_data.product_id,
+        quantity=order_data.quantity,
+        total_price=total_price
+    )
+
+    # 6. Save order and update stock
+    try:
+        db.add(order)
+        product.quantity -= order_data.quantity
+        db.commit()
+        db.refresh(order)
+
+    except Exception:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Could not create order"
+        )
+
+    # 7. Clear product cache
+    await clear_product_cache(product.id)
+
+    # 8. Prepare webhook notification
+    webhook_payload = {
+        "event": "order.created",
+        "order_id": order.id,
+        "product_name": product.name,
+        "quantity": order.quantity,
+        "total_price": float(order.total_price)
+    }
+
+    # 9. Send automatic webhook
+    try:
+        webhook_url = "http://127.0.0.1:8002/webhooks/orders"
+
+        await send_webhook(
+            webhook_url,
+            webhook_payload
+        )
+
+        print("ORDER WEBHOOK SENT SUCCESSFULLY")
+
+    except Exception as error:
+        print("ORDER WEBHOOK DELIVERY FAILED:", error)
+
+    # 10. Return order
+    return order
+
 
 # @app.get("/")
 # def home():
